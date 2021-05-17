@@ -1,5 +1,8 @@
-function initApp() {
-    console.log('Init application');
-}
+import express from 'express';
+import { apiTodosRouter } from './routes/api.router';
 
-initApp();
+const app = express();
+
+app.use(apiTodosRouter);
+
+export {app};
