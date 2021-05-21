@@ -7,13 +7,23 @@ class AddTodoController{
     execute(){
         return ()=>{
             this.renderView();
-            this.initializeView();
+            
         };
     }
     async renderView(){
         // eslint-disable-next-line no-console
         console.log('render');
+        const cat_select = document.getElementById('category');
+        cat_select.innerHTML= '';
+        const categories = (await APIRest.findAllCategories()).categories;
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.text=category.title;
+            option.value=category._id;
+            cat_select.add(option);
+        });
         Views.showView('add_todos'); 
+        this.initializeView();
     }
     async initializeView(){
      // eslint-disable-next-line no-console
@@ -24,8 +34,8 @@ class AddTodoController{
  }
  async addTodo(e){
      e.preventDefault();
-     const {description, title} = this.addTodoForm.elements;
-     const apiCall = (await APIRest.createTodo({description: description.value, title: title.value}));
+     const {description, title, category} = this.addTodoForm.elements;
+     const apiCall = (await APIRest.createTodo({description: description.value, title: title.value, category: category.value}));
      if(apiCall){
         appRouter.navigate('/todos');
      };
