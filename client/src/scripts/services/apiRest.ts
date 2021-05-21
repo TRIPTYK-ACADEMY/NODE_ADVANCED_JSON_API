@@ -38,6 +38,35 @@ class APIRest {
         return APIRest.execute('api/v1/todos', options);
     }catch(e){console.log(e);}
     }
+    static findAllCategories= async ()=>{
+        try{
+        const token = AppStorage.getInstance('tpk-app').getValue('token');
+        const options = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'authorization':`Bearer ${token}`
+            }
+        };
+        return APIRest.execute('api/v1/categories', options);
+    }catch(e){console.log(e);}
+    }
+    
+    static createCategory = async (values)=>{
+        const token = AppStorage.getInstance('tpk-app').getValue('token');
+        const options = {
+            method: 'POST',
+            body:JSON.stringify(values),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'authorization':`Bearer ${token}`
+            }
+        };
+        return APIRest.execute('api/v1/categories', options);
+    } 
+    
     static createTodo = async (values)=>{
         const token = AppStorage.getInstance('tpk-app').getValue('token');
         const options = {
@@ -52,6 +81,7 @@ class APIRest {
         return APIRest.execute('api/v1/todos', options);
     } 
 
+
     static deleteTodo = async (values)=>{
         const token = AppStorage.getInstance('tpk-app').getValue('token');
         const options = {
@@ -63,6 +93,18 @@ class APIRest {
             }
         };
         return APIRest.execute(`api/v1/todos/${values}`, options);
+    }
+    static deleteCategory = async (values)=>{
+        const token = AppStorage.getInstance('tpk-app').getValue('token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'authorization':`Bearer ${token}`
+            }
+        };
+        return APIRest.execute(`api/v1/categories/${values}`, options);
     }
     
     static async execute(action, options={}){
