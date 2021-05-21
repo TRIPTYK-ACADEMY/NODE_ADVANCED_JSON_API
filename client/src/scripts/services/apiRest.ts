@@ -24,7 +24,7 @@ class APIRest {
         };
         return APIRest.execute('api/v1/users', options);
     }   
-    static findAllTodos= async ()=>{
+    static findAllTodos= async (category?:string)=>{
         try{
         const token = AppStorage.getInstance('tpk-app').getValue('token');
         const options = {
@@ -35,6 +35,9 @@ class APIRest {
                 'authorization':`Bearer ${token}`
             }
         };
+        if(category){
+            return APIRest.execute(`api/v1/todos?filterByCategory=${category}`, options);
+        }
         return APIRest.execute('api/v1/todos', options);
     }catch(e){console.log(e);}
     }

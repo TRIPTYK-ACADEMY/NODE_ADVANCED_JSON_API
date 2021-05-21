@@ -3,15 +3,36 @@ import { Views } from '../services/Views';
 
 class TodosController{
     loginForm : HTMLFormElement;
+    todos:[];
+    filteredTodos: [];
+  
     execute(){
-        return ()=>{
-            this.renderView();
+        return async ()=>{
+            //////CATEGORIES//////
+        const cat_select = document.getElementById('location');
+        cat_select.innerHTML= '';
+        const categories = (await APIRest.findAllCategories()).categories;
+        const option = document.createElement('option');
+        option.text='Select Category';
+        cat_select.add(option);
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.text=category.title;
+            option.value=category._id;
+            cat_select.add(option);
+        });
+        cat_select.addEventListener('change', this.filterTodos.bind(this));
+            this.todos = (await APIRest.findAllTodos()).todos;
+            this.renderView(this.todos);
         };
     }
-    async renderView(){
+    async renderView(todos:[]){
         // eslint-disable-next-line no-console
         console.log('render');
-        const todos = (await APIRest.findAllTodos()).todos;
+
+
+        //////TODOS///////////
+        // const todos = (await APIRest.findAllTodos()).todos;
         const todos_list: HTMLUListElement = document.getElementById('todos_list') as HTMLUListElement;
         const html = todos.reduce((prev, next)=>{
             return `${prev}\n<li class="p-4 hover:bg-gray-50 cursor-pointer flex items-center justify-between">
@@ -25,7 +46,7 @@ class TodosController{
                     </svg>
                 </button>
                 ${next.title}
-                <span class="text-xs rounded-lg bg-yellow-300 text-yellow-800 ml-4 px-3 py-1">Home</span>
+                <span class="text-xs rounded-lg bg-yellow-300 text-yellow-800 ml-4 px-3 py-1">${next.category.title}</span>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current text-gray-300 ml-8"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,6 +74,17 @@ class TodosController{
         if(result){
             this.renderView();
         }
+    }
+
+
+    async filterTodos(e){
+        e.preventDefault();
+        const id = e.target.value;
+        ///FRONT filter
+        // this.filteredTodos = this.todos.filter((todo)=>todo.category._id === id);
+        //BACK filter
+        this.filteredTodos = (await APIRest.findAllTodos(id)).todos;
+        this.renderView(this.filteredTodos);
     }
 }
 export {TodosController};

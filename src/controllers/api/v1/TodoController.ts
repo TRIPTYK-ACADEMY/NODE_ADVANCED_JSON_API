@@ -11,7 +11,10 @@ class TodoController {
     static findAll= async (req:Request, res:Response) => {
         const tokenUserId = verify(req.headers.authorization?.split(' ')[1], process.env.JWT_SECRET).data;
         const user =await TodoController.userModel.findById(tokenUserId);
-       return res.json({todos:await TodoController.model.find({user})});
+        if(req.query.filterByCategory){
+            return res.json({todos:await TodoController.model.find({user, category:req.query.filterByCategory}).populate('category')});
+        }
+       return res.json({todos:await TodoController.model.find({user}).populate('category')});
     }
 
     static create = async(req:Request, res:Response) => {
