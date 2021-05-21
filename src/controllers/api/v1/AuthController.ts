@@ -2,7 +2,7 @@ import { getModelForClass } from '@typegoose/typegoose';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../models/User';
 import {sign, verify} from 'jsonwebtoken';
-import { now } from 'mongoose';
+
 class AuthController {
     static model = getModelForClass(User);
     static login = async (req:Request, res:Response, next:NextFunction)=>{

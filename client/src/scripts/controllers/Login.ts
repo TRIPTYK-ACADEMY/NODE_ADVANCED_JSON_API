@@ -1,5 +1,6 @@
 import { appRouter } from '../Router';
 import { APIRest } from '../services/apiRest';
+import { AppStorage } from '../services/localStorage';
 import { Views } from '../services/Views';
 
 class LoginController{
@@ -14,8 +15,6 @@ class LoginController{
         // eslint-disable-next-line no-console
         console.log('render');
         Views.showView('login');
-    
-        
     }
     initializeView(){
         // eslint-disable-next-line no-console
@@ -29,7 +28,7 @@ class LoginController{
         const {email,password} = this.loginForm.elements;
       const token = (await APIRest.login({email: email.value,password: password.value}));
       if(typeof token === 'string'){
-          console.log('welcome');
+        AppStorage.getInstance('tpk_app').setValue('token',token);
           appRouter.navigate('/todos');
       } else{
           console.log('out you go');
