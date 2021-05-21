@@ -23,6 +23,7 @@ class TodosController{
         });
         cat_select.addEventListener('change', this.filterTodos.bind(this));
             this.todos = (await APIRest.findAllTodos()).todos;
+            
             this.renderView(this.todos);
         };
     }

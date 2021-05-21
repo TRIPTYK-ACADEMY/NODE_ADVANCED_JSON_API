@@ -7,5 +7,6 @@ const apiAuthRouter = Router();
 //DEFINE my Routes for todos
 
 apiAuthRouter.post('/api/v1/login', catchErrors(AuthController.login));
+apiAuthRouter.post('/api/v1/check-token', catchErrors(AuthController.checkToken));
 
 export {apiAuthRouter};

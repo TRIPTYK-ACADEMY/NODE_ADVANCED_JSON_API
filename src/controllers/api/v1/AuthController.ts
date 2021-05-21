@@ -39,6 +39,20 @@ class AuthController {
         }
         //token no good err
     }
+    
+    static checkToken = async(req:Request, res:Response)=>{
+    
+        try{
+            const jwtToken = req.headers.authorization?.split(' ')[1] || 'notoken';
+            const userId = await verify(jwtToken, process.env.JWT_SECRET);
+            return res.json({token:{isValid:true}});
+        }catch(e){
+            console.log('ok');
+            return res.status(401).json({token:{isValid:false}});      
+        }
+        
+    }
+
 }
 
 export {AuthController};

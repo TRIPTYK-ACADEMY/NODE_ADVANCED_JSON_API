@@ -1,7 +1,22 @@
+import { appRouter } from '../Router';
 import { AppStorage } from './localStorage';
 
 class APIRest {
     static baseURL = 'http://localhost:3000'
+    static checkToken = async(token)=>{
+        try{
+          
+            const options = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization':`Bearer ${token}`
+                }
+            };
+            return APIRest.execute('api/v1/check-token', options);
+        }catch(e){console.log(e);}
+    }
     static login = async (values)=>{
         const options = {
             method: 'POST',
@@ -27,6 +42,10 @@ class APIRest {
     static findAllTodos= async (category?:string)=>{
         try{
         const token = AppStorage.getInstance('tpk-app').getValue('token');
+        const isValidToken = await APIRest.checkToken(token);
+         if(!isValidToken.token.isValid){
+            appRouter.navigate('/');
+         }
         const options = {
             method: 'GET',
             headers: {
