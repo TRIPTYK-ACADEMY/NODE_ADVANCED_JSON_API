@@ -51,6 +51,20 @@ class APIRest {
         };
         return APIRest.execute('api/v1/todos', options);
     } 
+
+    static deleteTodo = async (values)=>{
+        const token = AppStorage.getInstance('tpk-app').getValue('token');
+        const options = {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'authorization':`Bearer ${token}`
+            }
+        };
+        return APIRest.execute(`api/v1/todos/${values}`, options);
+    }
+    
     static async execute(action, options={}){
         try{
             const rawResponse = await fetch(`${this.baseURL}/${action}`, options);

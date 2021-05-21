@@ -6,7 +6,6 @@ class TodosController{
     execute(){
         return ()=>{
             this.renderView();
-            this.initializeView();
         };
     }
     async renderView(){
@@ -36,21 +35,24 @@ class TodosController{
         </li>`;
         }, '');
         todos_list.innerHTML=html;
+        this.initializeView();
         Views.showView('todos');
 
-    
-        
     }
     async initializeView(){
-        const deletBtns = [...document.getElementsByClassName('deleteBtn')];
-        deletBtns.forEach(btn => {
+        const deleteBtns = [...document.querySelectorAll('.deleteBtn')];
+        deleteBtns.forEach(btn => {
             btn.addEventListener('click', this.deleteTodo.bind(this));
         });
-        console.log(deletBtns);
     }
     
     async deleteTodo(e){
-        console.log(e);
+        e.preventDefault();
+       const id=e.currentTarget.dataset.tpkId;
+        const result = await APIRest.deleteTodo(id);
+        if(result){
+            this.renderView();
+        }
     }
 }
 export {TodosController};
