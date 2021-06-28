@@ -129,8 +129,9 @@ class APIRest {
         return APIRest.execute(`api/v1/categories/${values}`, options);
     }
     
-    static async execute(action, options={}){
+    static async execute(action:unknown, options={}){
         try{
+    
             const rawResponse = await fetch(`${this.baseURL}/${action}`, options);
             const response = await rawResponse.json();
             return response;
@@ -143,3 +144,4 @@ class APIRest {
 }
 
 export{APIRest};
+
